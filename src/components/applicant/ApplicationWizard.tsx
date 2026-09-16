@@ -22,7 +22,7 @@ export const ApplicationWizard: React.FC = () => {
 
   // Form states
   const [schemeId, setSchemeId] = useState('nfst');
-  const [fullName, setFullName] = useState('Gauri Agrawal');
+  const [fullName, setFullName] = useState('Rahul Jadhav');
   const [subTribe, setSubTribe] = useState('Gond');
   const [isPVTG, setIsPVTG] = useState(false);
   const [state, setState] = useState('Maharashtra');
@@ -48,7 +48,7 @@ export const ApplicationWizard: React.FC = () => {
     e.preventDefault();
     setSubmitted(true);
     addAuditEntry(
-      'Gauri Agrawal',
+      'Rahul Jadhav',
       'Applicant',
       'Submitted Fresh Scholarship Application',
       'ST26-10482 / NFST',
@@ -295,7 +295,7 @@ export const ApplicationWizard: React.FC = () => {
             </div>
             <div className="space-y-2 text-xs">
               {[
-                { title: 'ST Caste Certificate', file: 'Gauri_ST_Caste_Certificate_SDM.pdf', conf: '99%' },
+                { title: 'ST Caste Certificate', file: 'Rahul_ST_Caste_Certificate_SDM.pdf', conf: '99%' },
                 { title: 'Annual Income Certificate', file: 'Income_Certificate_2025_26_Scan.pdf', conf: '61% (Flagged Date)', alert: true },
                 { title: 'Academic Marksheet', file: 'MSc_Biotechnology_Consolidated_Marksheet.pdf', conf: '98%' },
                 { title: 'Ph.D. Enrolment Bonafide', file: 'IITKGP_PhD_Bonafide_Enrolment.pdf', conf: '97%' },

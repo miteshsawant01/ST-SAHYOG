@@ -117,7 +117,7 @@ export const AdminDashboard: React.FC = () => {
             AI Discrepancy Flag Triage Priority
           </div>
           <h2 className="text-xl font-extrabold tracking-tight">
-            Flagged Application #ST26-10482 (Gauri Agrawal)
+            Flagged Application #ST26-10482 (Rahul Jadhav)
           </h2>
           <p className="text-xs text-blue-100 leading-relaxed">
             AI Scrutiny Engine identified a 61% OCR confidence on the Income Certificate issue date. Candidate has uploaded a replacement certificate. Immediate officer review required to clear DBT sanction block.

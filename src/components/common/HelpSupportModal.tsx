@@ -25,7 +25,7 @@ export const HelpSupportModal: React.FC = () => {
     e.preventDefault();
     setTicketSubmitted(true);
     addAuditEntry(
-      'Gauri Agrawal',
+      'Rahul Jadhav',
       'Applicant',
       'Filed Support Grievance Ticket',
       'MoTA Grievance Cell',

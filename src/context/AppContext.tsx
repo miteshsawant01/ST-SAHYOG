@@ -128,7 +128,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             isReplaced: true,
             reissueDate: '14/07/2025',
             extractedFields: [
-              { label: 'Name', value: 'Gauri Agrawal', confidence: 100, status: 'verified' as const, bbox: { x: 40, y: 95, w: 190, h: 24 } },
+              { label: 'Name', value: 'Rahul Jadhav', confidence: 100, status: 'verified' as const, bbox: { x: 40, y: 95, w: 190, h: 24 } },
               { label: 'Certificate Number', value: 'MHA/REV/2025/88921', confidence: 99, status: 'verified' as const, bbox: { x: 40, y: 130, w: 210, h: 24 } },
               { label: 'Income Amount', value: '₹1,80,000 (Certified)', confidence: 98, status: 'verified' as const, bbox: { x: 40, y: 165, w: 320, h: 24 } },
               { label: 'Issue Date', value: '14/07/2025 (Crisp Stamp / Competent Authority)', confidence: 98, status: 'verified' as const, bbox: { x: 40, y: 200, w: 280, h: 24 } }
@@ -176,7 +176,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     // Log in Audit Trail
     addAuditEntry(
-      'Gauri Agrawal',
+      'Rahul Jadhav',
       'Applicant',
       'Uploaded Replacement Document',
       'ST26-10482 / Income Certificate',

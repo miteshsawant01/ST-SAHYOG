@@ -291,7 +291,7 @@ export const ScrutinyWorkstation: React.FC = () => {
                   <span className="absolute -top-2.5 left-2 bg-blue-600 text-white text-[8px] font-mono px-1 rounded uppercase font-bold">
                     ✓ Field: Applicant Name (100%)
                   </span>
-                  <p className="font-bold text-slate-900">Name: Kum. Gauri Agrawal</p>
+                  <p className="font-bold text-slate-900">Name: Shri Rahul Jadhav</p>
                 </div>
 
                 {/* Bounding Box 2: Certificate Number */}
@@ -383,7 +383,7 @@ export const ScrutinyWorkstation: React.FC = () => {
                 <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-50 text-emerald-900 border border-emerald-100">
                   <div className="flex items-center gap-1.5">
                     <Check className="w-4 h-4 text-emerald-600" />
-                    <span>Name: Gauri Agrawal</span>
+                    <span>Name: Rahul Jadhav</span>
                   </div>
                   <span className="font-mono text-[10px] font-bold text-emerald-700">100%</span>
                 </div>
@@ -504,7 +504,7 @@ export const ScrutinyWorkstation: React.FC = () => {
 
             <div className="my-4 space-y-3 text-xs">
               <p className="text-slate-600">
-                This notice will be recorded in the audit trail and dispatched immediately to candidate <strong>Gauri Agrawal</strong> via SMS, Email, and the ST-Sahyog Deficiency Centre.
+                This notice will be recorded in the audit trail and dispatched immediately to candidate <strong>Rahul Jadhav</strong> via SMS, Email, and the ST-Sahyog Deficiency Centre.
               </p>
               <div>
                 <label className="block font-bold text-slate-700 mb-1">Deficiency Memo Rationale</label>

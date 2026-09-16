@@ -233,7 +233,7 @@ export const Header: React.FC = () => {
             )}
           </div>
 
-          {/* Profile Badge matching reference: "Hi, Gauri / ST Student" */}
+          {/* Profile Badge matching reference: "Hi, Rahul / ST Student" */}
           <div className="relative">
             <button 
               onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -248,7 +248,7 @@ export const Header: React.FC = () => {
               </div>
               <div className="hidden sm:flex flex-col">
                 <span className="text-xs font-bold text-slate-800 leading-tight">
-                  {role === 'applicant' ? 'Hi, Gauri' : 'Shri Ramesh Sharma'}
+                  {role === 'applicant' ? 'Hi, Rahul' : 'Shri Ramesh Sharma'}
                 </span>
                 <span className="text-[10px] text-slate-500 leading-tight">
                   {role === 'applicant' ? 'ST Student' : 'MoTA Scrutiny Officer'}
@@ -262,7 +262,7 @@ export const Header: React.FC = () => {
               <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-3 text-xs">
                 <div className="border-b border-slate-100 pb-2 mb-2">
                   <p className="font-bold text-slate-900">
-                    {role === 'applicant' ? 'Gauri Agrawal' : 'Shri Ramesh Sharma'}
+                    {role === 'applicant' ? 'Rahul Jadhav' : 'Shri Ramesh Sharma'}
                   </p>
                   <p className="text-slate-500">
                     {role === 'applicant' ? 'Tribal ID: ST-MH-994821' : 'Officer ID: MoTA-SCR-04'}

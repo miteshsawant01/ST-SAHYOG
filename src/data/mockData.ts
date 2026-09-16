@@ -157,11 +157,11 @@ export const INITIAL_APPLICATION: ApplicationRecord = {
   id: 'ST26-10482',
   schemeId: 'nfst',
   schemeName: 'National Fellowship for ST Students (NFST)',
-  applicantName: 'Gauri Agrawal',
-  gender: 'Female',
+  applicantName: 'Rahul Jadhav',
+  gender: 'Male',
   dob: '2001-04-18',
   mobile: '+91 98765 43210',
-  email: 'gauri.agrawal.st@iitkgp.ac.in',
+  email: 'rahul.jadhav.st@iitkgp.ac.in',
   stSubTribe: 'Gond (Scheduled Tribe of Maharashtra)',
   isPVTG: false,
   state: 'Maharashtra',
@@ -196,14 +196,14 @@ export const INITIAL_APPLICATION: ApplicationRecord = {
       id: 'doc-st',
       docType: 'st_certificate',
       title: 'ST Community Certificate',
-      fileName: 'Gauri_ST_Caste_Certificate_SDM.pdf',
+      fileName: 'Rahul_ST_Caste_Certificate_SDM.pdf',
       fileSize: '1.4 MB',
       uploadedAt: '02 Sep 2026, 11:15 AM',
       status: 'verified',
       confidenceScore: 99,
       extractedFields: [
-        { label: 'Applicant Name', value: 'Gauri Agrawal', confidence: 100, status: 'verified', bbox: { x: 30, y: 110, w: 220, h: 26 } },
-        { label: 'Father Name', value: 'Devendra Agrawal Gond', confidence: 99, status: 'verified', bbox: { x: 30, y: 145, w: 240, h: 26 } },
+        { label: 'Applicant Name', value: 'Rahul Jadhav', confidence: 100, status: 'verified', bbox: { x: 30, y: 110, w: 220, h: 26 } },
+        { label: 'Father Name', value: 'Suresh Jadhav Gond', confidence: 99, status: 'verified', bbox: { x: 30, y: 145, w: 240, h: 26 } },
         { label: 'Tribe Name', value: 'Gond (ST Entry #18)', confidence: 98, status: 'verified', bbox: { x: 30, y: 180, w: 210, h: 26 } },
         { label: 'Issuing Officer', value: 'Sub-Divisional Magistrate, Gadchiroli', confidence: 97, status: 'verified', bbox: { x: 30, y: 220, w: 310, h: 26 } },
         { label: 'Digital Sign / Barcode', value: 'Valid NIC-Gov e-Pramaan Token', confidence: 100, status: 'verified', bbox: { x: 280, y: 350, w: 140, h: 60 } }
@@ -220,7 +220,7 @@ export const INITIAL_APPLICATION: ApplicationRecord = {
       status: 'review_required',
       confidenceScore: 61,
       extractedFields: [
-        { label: 'Name', value: 'Gauri Agrawal', confidence: 98, status: 'verified', bbox: { x: 40, y: 95, w: 190, h: 24 } },
+        { label: 'Name', value: 'Rahul Jadhav', confidence: 98, status: 'verified', bbox: { x: 40, y: 95, w: 190, h: 24 } },
         { label: 'Certificate Number', value: 'MHA/REV/2025/88921', confidence: 96, status: 'verified', bbox: { x: 40, y: 130, w: 210, h: 24 } },
         { label: 'Income Amount', value: '₹1,80,000 (One Lakh Eighty Thousand Only)', confidence: 95, status: 'verified', bbox: { x: 40, y: 165, w: 320, h: 24 } },
         { label: 'Issue Date', value: '12/??/2024 (Smudged / Low Contrast)', confidence: 61, status: 'warning', bbox: { x: 40, y: 200, w: 260, h: 24 } }
@@ -238,7 +238,7 @@ export const INITIAL_APPLICATION: ApplicationRecord = {
       status: 'verified',
       confidenceScore: 98,
       extractedFields: [
-        { label: 'Candidate Name', value: 'Gauri Agrawal', confidence: 100, status: 'verified', bbox: { x: 50, y: 90, w: 200, h: 22 } },
+        { label: 'Candidate Name', value: 'Rahul Jadhav', confidence: 100, status: 'verified', bbox: { x: 50, y: 90, w: 200, h: 22 } },
         { label: 'Roll Number', value: '23BT91R04', confidence: 99, status: 'verified', bbox: { x: 50, y: 120, w: 150, h: 22 } },
         { label: 'CGPA / Grade', value: '8.84 / 10.0 (First Class with Distinction)', confidence: 98, status: 'verified', bbox: { x: 50, y: 150, w: 290, h: 22 } },
         { label: 'Awarding Institute', value: 'Savitribai Phule Pune University', confidence: 97, status: 'verified', bbox: { x: 50, y: 180, w: 280, h: 22 } }
@@ -439,7 +439,7 @@ export const INITIAL_AUDIT_TRAIL: AuditLogEntry[] = [
     actor: 'Ramesh Sharma (MoTA-SCR-04)',
     actorRole: 'Scrutiny Officer',
     action: 'Opened Application Dossier',
-    target: 'ST26-10482 (Gauri Agrawal)',
+    target: 'ST26-10482 (Rahul Jadhav)',
     details: 'Initiated manual inspection on Income Certificate and ST Community Certificate.',
     hash: '8f4c2e...b19a'
   },
@@ -456,7 +456,7 @@ export const INITIAL_AUDIT_TRAIL: AuditLogEntry[] = [
   {
     id: 'log-003',
     timestamp: '14:38:54',
-    actor: 'Gauri Agrawal',
+    actor: 'Rahul Jadhav',
     actorRole: 'Applicant',
     action: 'Uploaded Replacement Document',
     target: 'ST26-10482 / doc-income',

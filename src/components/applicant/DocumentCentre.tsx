@@ -178,7 +178,7 @@ export const DocumentCentre: React.FC = () => {
                 </div>
 
                 <div className="space-y-2 text-slate-800">
-                  <p>This is to certify that candidate <strong>Gauri Agrawal</strong> has been duly verified under statutory rules.</p>
+                  <p>This is to certify that candidate <strong>Rahul Jadhav</strong> has been duly verified under statutory rules.</p>
                   <div className="bg-white p-2.5 rounded border border-slate-200 my-2 space-y-1">
                     {selectedDoc.extractedFields.map((field, idx) => (
                       <div key={idx} className="flex justify-between items-center text-[10px] font-sans">

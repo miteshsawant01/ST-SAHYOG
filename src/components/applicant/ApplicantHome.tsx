@@ -356,7 +356,7 @@ export const ApplicantHome: React.FC = () => {
               <User className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900 leading-tight">Gauri Agrawal</h4>
+              <h4 className="text-sm font-bold text-slate-900 leading-tight">Rahul Jadhav</h4>
               <p className="text-xs text-slate-500 mt-0.5">ST Student</p>
             </div>
           </div>
