@@ -48,8 +48,9 @@ export const ApplicationWizard: React.FC = () => {
     e.preventDefault();
     setSubmitted(true);
     addAuditEntry(
+      'Today',
       'Rahul Jadhav',
-      'Applicant',
+      'Student',
       'Submitted Fresh Scholarship Application',
       'ST26-10482 / NFST',
       'Electronic application and uploaded self-certified documents submitted for MoTA scrutiny.'

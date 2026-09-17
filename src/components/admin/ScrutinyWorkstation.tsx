@@ -26,7 +26,7 @@ export const ScrutinyWorkstation: React.FC = () => {
   const { 
     application, 
     activeReviewAppId, 
-    setAdminTab, 
+    setOfficerTab, 
     officerVerifyDocument, 
     officerRaiseDeficiency,
     officerSubmitDecision 
@@ -70,7 +70,7 @@ export const ScrutinyWorkstation: React.FC = () => {
       <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button 
-            onClick={() => setAdminTab('queue')}
+            onClick={() => setOfficerTab('applications')}
             className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition"
             title="Back to Queue"
           >

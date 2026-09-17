@@ -14,7 +14,7 @@ import {
 import { useApp } from '../../context/AppContext';
 
 export const ApplicationQueue: React.FC = () => {
-  const { queue, setActiveReviewAppId, setAdminTab } = useApp();
+  const { queue, setActiveReviewAppId, setOfficerTab } = useApp();
   const [filterScheme, setFilterScheme] = useState('All');
   const [filterStatus, setFilterStatus] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -114,7 +114,7 @@ export const ApplicationQueue: React.FC = () => {
                   className="hover:bg-blue-50/40 transition cursor-pointer"
                   onClick={() => {
                     setActiveReviewAppId(app.id);
-                    setAdminTab('review');
+                    setOfficerTab('eligibility-review');
                   }}
                 >
                   <td className="py-3 px-4 font-mono font-bold text-gov-navy">
@@ -153,7 +153,7 @@ export const ApplicationQueue: React.FC = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         setActiveReviewAppId(app.id);
-                        setAdminTab('review');
+                        setOfficerTab('eligibility-review');
                       }}
                       className="px-3 py-1.5 bg-gov-navy hover:bg-blue-900 text-white font-bold rounded-lg text-[11px] inline-flex items-center gap-1 shadow-2xs"
                     >

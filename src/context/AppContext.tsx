@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
   UserRole, 
-  ApplicantTab, 
+  StudentTab, 
+  OfficerTab, 
   AdminTab, 
   ApplicationRecord, 
   SchemeRuleConfig, 
@@ -9,7 +10,7 @@ import {
   Scheme 
 } from '../types';
 import { 
-  INITIAL_APPLICATION, 
+  PRIMARY_APPLICATION, 
   MOCK_APPLICATIONS_QUEUE, 
   INITIAL_SCHEME_CONFIG, 
   INITIAL_AUDIT_TRAIL, 
@@ -19,19 +20,22 @@ import {
 interface AppContextType {
   role: UserRole;
   setRole: (role: UserRole) => void;
-  applicantTab: ApplicantTab;
-  setApplicantTab: (tab: ApplicantTab) => void;
+  studentTab: StudentTab;
+  setStudentTab: (tab: StudentTab) => void;
+  officerTab: OfficerTab;
+  setOfficerTab: (tab: OfficerTab) => void;
   adminTab: AdminTab;
   setAdminTab: (tab: AdminTab) => void;
-  language: 'en' | 'hi';
-  setLanguage: (lang: 'en' | 'hi') => void;
+
+  language: 'en' | 'hi' | 'mr';
+  setLanguage: (lang: 'en' | 'hi' | 'mr') => void;
   fontSize: 'normal' | 'large' | 'xlarge';
   setFontSize: (size: 'normal' | 'large' | 'xlarge') => void;
   highContrast: boolean;
   setHighContrast: (val: boolean | ((prev: boolean) => boolean)) => void;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
-  
+
   schemes: Scheme[];
   application: ApplicationRecord;
   queue: ApplicationRecord[];
@@ -39,44 +43,50 @@ interface AppContextType {
   setActiveReviewAppId: (id: string) => void;
   schemeConfig: SchemeRuleConfig;
   auditTrail: AuditLogEntry[];
-  
+
   // Interactive Actions
-  resolveDeficiency: (replacementFileName: string) => void;
+  resolveDeficiencyWithAIRecheck: (replacementFileName: string) => Promise<void>;
   officerVerifyDocument: (appId: string, docId: string, newConfidence?: number) => void;
   officerRaiseDeficiency: (appId: string, docId: string, reason: string) => void;
   officerSubmitDecision: (appId: string, decision: 'Accepted' | 'Correction Requested' | 'Escalated' | 'Rejected', notes: string) => void;
+  recordSelectionAction: (appId: string, action: 'Approve for Selection' | 'Request Clarification' | 'Reject', reason: string) => void;
   saveNewSchemeVersion: (updatedConfig: Partial<SchemeRuleConfig>, newVersion: string, changeNote: string) => void;
-  addAuditEntry: (actor: string, role: AuditLogEntry['actorRole'], action: string, target: string, details: string) => void;
-  
+  addAuditEntry: (date: string, actor: string, role: AuditLogEntry['actorRole'], action: string, target?: string, details?: string) => void;
+
   // Quick View helper
   selectedSchemeForModal: Scheme | null;
   setSelectedSchemeForModal: (scheme: Scheme | null) => void;
   showHelpModal: boolean;
   setShowHelpModal: (val: boolean) => void;
+
+  // Backwards compatibility alias
+  applicantTab: string;
+  setApplicantTab: (tab: any) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [role, setRole] = useState<UserRole>('applicant');
-  const [applicantTab, setApplicantTab] = useState<ApplicantTab>('home');
-  const [adminTab, setAdminTab] = useState<AdminTab>('dashboard');
-  const [language, setLanguage] = useState<'en' | 'hi'>('en');
+  const [role, setRole] = useState<UserRole>('student');
+  const [studentTab, setStudentTab] = useState<StudentTab>('home');
+  const [officerTab, setOfficerTab] = useState<OfficerTab>('command-center');
+  const [adminTab, setAdminTab] = useState<AdminTab>('scheme-config');
+
+  const [language, setLanguage] = useState<'en' | 'hi' | 'mr'>('en');
   const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
   const [highContrast, setHighContrast] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [schemes] = useState<Scheme[]>(MOCK_SCHEMES);
-  const [application, setApplication] = useState<ApplicationRecord>(INITIAL_APPLICATION);
+  const [application, setApplication] = useState<ApplicationRecord>(PRIMARY_APPLICATION);
   const [queue, setQueue] = useState<ApplicationRecord[]>(MOCK_APPLICATIONS_QUEUE);
-  const [activeReviewAppId, setActiveReviewAppId] = useState<string>('ST26-10482');
+  const [activeReviewAppId, setActiveReviewAppId] = useState<string>('ST26-DEMO001');
   const [schemeConfig, setSchemeConfig] = useState<SchemeRuleConfig>(INITIAL_SCHEME_CONFIG);
   const [auditTrail, setAuditTrail] = useState<AuditLogEntry[]>(INITIAL_AUDIT_TRAIL);
 
   const [selectedSchemeForModal, setSelectedSchemeForModal] = useState<Scheme | null>(null);
   const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
 
-  // Apply font scale and high-contrast classes to root
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('text-scale-large', 'text-scale-xlarge', 'high-contrast');
@@ -86,18 +96,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [fontSize, highContrast]);
 
   const addAuditEntry = (
+    date: string,
     actor: string,
     role: AuditLogEntry['actorRole'],
     action: string,
-    target: string,
-    details: string
+    target?: string,
+    details?: string
   ) => {
     const now = new Date();
-    const timeString = now.toTimeString().split(' ')[0]; // e.g. 14:45:12
+    const timeString = now.toTimeString().split(' ')[0];
     const randomHash = Math.random().toString(16).substring(2, 8) + '...' + Math.random().toString(16).substring(2, 6);
-    
+
     const newEntry: AuditLogEntry = {
       id: `log-${Date.now()}`,
+      date,
       timestamp: timeString,
       actor,
       actorRole: role,
@@ -110,12 +122,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAuditTrail(prev => [newEntry, ...prev]);
   };
 
-  // Flagship Deficiency Resolution Action
-  const resolveDeficiency = (replacementFileName: string) => {
+  // Item 4: Interactive Deficiency Loop: Detect → Notify → Resubmit → Recheck → Decide
+  const resolveDeficiencyWithAIRecheck = async (replacementFileName: string) => {
     const now = new Date();
     const timeString = now.toTimeString().split(' ')[0];
 
-    // Update application documents
+    // 1. Update document to re-checking / verified state with high confidence
     setApplication(prev => {
       const updatedDocs = prev.documents.map(doc => {
         if (doc.id === 'doc-income') {
@@ -128,13 +140,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             isReplaced: true,
             reissueDate: '14/07/2025',
             extractedFields: [
-              { label: 'Name', value: 'Rahul Jadhav', confidence: 100, status: 'verified' as const, bbox: { x: 40, y: 95, w: 190, h: 24 } },
-              { label: 'Certificate Number', value: 'MHA/REV/2025/88921', confidence: 99, status: 'verified' as const, bbox: { x: 40, y: 130, w: 210, h: 24 } },
-              { label: 'Income Amount', value: '₹1,80,000 (Certified)', confidence: 98, status: 'verified' as const, bbox: { x: 40, y: 165, w: 320, h: 24 } },
-              { label: 'Issue Date', value: '14/07/2025 (Crisp Stamp / Competent Authority)', confidence: 98, status: 'verified' as const, bbox: { x: 40, y: 200, w: 280, h: 24 } }
+              { label: 'Applicant Name', value: 'Rahul Jadhav', confidence: 100, status: 'verified' as const, bbox: { x: 40, y: 95, w: 190, h: 24 } },
+              { label: 'Certificate No.', value: 'MHA/REV/2025/88921', confidence: 99, status: 'verified' as const, bbox: { x: 40, y: 130, w: 210, h: 24 } },
+              { label: 'Income', value: '₹1,80,000', confidence: 98, status: 'verified' as const, bbox: { x: 40, y: 165, w: 320, h: 24 } },
+              { label: 'Issue Date', value: '14/07/2025', confidence: 98, status: 'verified' as const, bbox: { x: 40, y: 200, w: 280, h: 24 } }
             ],
             aiIssue: undefined,
-            aiRecommendation: 'Replaced document verified. Clear SDM digital stamp and QR code validated.'
+            aiRecommendation: 'Revalidation complete. Date verified matching active financial year. Ready for officer verification.'
           };
         }
         return doc;
@@ -157,30 +169,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         ...prev,
         documents: updatedDocs,
         deficiencies: updatedDeficiencies,
-        completionPercentage: 88,
+        completionPercentage: 75,
         overallStatus: 'In Review' as const
       };
     });
 
-    // Also update in queue for officer view
+    // 2. Update queue for officer view
     setQueue(prev => prev.map(app => {
-      if (app.id === 'ST26-10482') {
+      if (app.id === 'ST26-DEMO001') {
         return {
           ...app,
           overallStatus: 'In Review' as const,
-          completionPercentage: 88
+          completionPercentage: 75
         };
       }
       return app;
     }));
 
-    // Log in Audit Trail
+    // 3. Add to Audit Trail
     addAuditEntry(
-      'Rahul Jadhav',
-      'Applicant',
-      'Uploaded Replacement Document',
-      'ST26-10482 / Income Certificate',
-      `Applicant submitted reissued certificate "${replacementFileName}". AI re-scan completed with 98% confidence.`
+      'Today',
+      'Student',
+      'Student',
+      'Document resubmitted',
+      'ST26-DEMO001 / doc-income',
+      `Rahul Jadhav uploaded replacement certificate "${replacementFileName}".`
+    );
+    addAuditEntry(
+      'Today',
+      'System',
+      'System',
+      'Recheck completed',
+      'ST26-DEMO001 / doc-income',
+      'AI Recheck complete (98% confidence). Revalidation complete.'
     );
   };
 
@@ -201,27 +222,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return {
         ...prev,
         documents: updatedDocs,
-        completionPercentage: 92,
+        completionPercentage: 90,
         overallStatus: 'Verified' as const
       };
     });
 
     addAuditEntry(
-      'Ramesh Sharma (MoTA-SCR-04)',
-      'Scrutiny Officer',
-      'Verified & Accepted Document',
+      'Today',
+      'Officer',
+      'Officer',
+      'Verification completed',
       `${appId} / ${docId}`,
-      'Officer verified physical validity and stamps. Marked verified in scrutiny record.'
+      'Officer verified physical validity and stamps. Marked verified.'
     );
   };
 
   const officerRaiseDeficiency = (appId: string, docId: string, reason: string) => {
     addAuditEntry(
-      'Ramesh Sharma (MoTA-SCR-04)',
-      'Scrutiny Officer',
-      'Raised Deficiency Notice',
+      'Today',
+      'Officer',
+      'Officer',
+      'Deficiency flagged',
       `${appId} / ${docId}`,
-      `Deficiency issued: "${reason}". Applicant notified via SMS and portal inbox.`
+      `Officer issued deficiency notice: "${reason}".`
     );
   };
 
@@ -254,11 +277,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }));
 
     addAuditEntry(
-      'Ramesh Sharma (MoTA-SCR-04)',
-      'Scrutiny Officer',
-      `Recorded Officer Decision: ${decision}`,
+      'Today',
+      'Officer',
+      'Officer',
+      `Officer Decision: ${decision}`,
       appId,
       `Official Notes: "${notes}"`
+    );
+  };
+
+  // Item 13: Selection Review decision recorder
+  const recordSelectionAction = (
+    appId: string, 
+    action: 'Approve for Selection' | 'Request Clarification' | 'Reject', 
+    reason: string
+  ) => {
+    const officerId = 'MoTA-OFFICER-04 (Ramesh Sharma)';
+    const today = 'Today';
+
+    setApplication(prev => ({
+      ...prev,
+      overallStatus: action === 'Approve for Selection' ? 'Selection Ready' : action === 'Reject' ? 'In Review' : 'Deficiency Raised',
+      completionPercentage: action === 'Approve for Selection' ? 100 : prev.completionPercentage
+    }));
+
+    addAuditEntry(
+      today,
+      'Officer',
+      'Officer',
+      `${action} - ${officerId}`,
+      appId,
+      `Reason: ${reason}`
     );
   };
 
@@ -279,11 +328,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }));
 
     addAuditEntry(
-      'Ramesh Sharma (MoTA-SCR-04)',
-      'Scheme Admin',
+      'Today',
+      'Officer',
+      'Officer',
       `Configured & Saved Scheme Version ${newVersion}`,
       schemeConfig.schemeName,
-      `Rule modifications: "${changeNote}". Rule engine configuration saved as active version ${newVersion}.`
+      `Rule updates: "${changeNote}". Dynamic scheme engine recompiled without rebuilding codebase.`
     );
   };
 
@@ -292,8 +342,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       value={{
         role,
         setRole,
-        applicantTab,
-        setApplicantTab,
+        studentTab,
+        setStudentTab,
+        officerTab,
+        setOfficerTab,
         adminTab,
         setAdminTab,
         language,
@@ -311,16 +363,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setActiveReviewAppId,
         schemeConfig,
         auditTrail,
-        resolveDeficiency,
+        resolveDeficiencyWithAIRecheck,
         officerVerifyDocument,
         officerRaiseDeficiency,
         officerSubmitDecision,
+        recordSelectionAction,
         saveNewSchemeVersion,
         addAuditEntry,
         selectedSchemeForModal,
         setSelectedSchemeForModal,
         showHelpModal,
-        setShowHelpModal
+        setShowHelpModal,
+        applicantTab: studentTab,
+        setApplicantTab: (tab: any) => {
+          if (tab === 'track-application') setStudentTab('track-status');
+          else if (tab === 'document-assistant' || tab === 'deficiency-centre') setStudentTab('documents');
+          else setStudentTab(tab);
+        }
       }}
     >
       {children}

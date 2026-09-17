@@ -1,23 +1,29 @@
-export type UserRole = 'applicant' | 'admin';
+export type UserRole = 'student' | 'officer' | 'admin';
 
-export type ApplicantTab = 
+export type StudentTab = 
   | 'home' 
   | 'explore-schemes' 
   | 'check-eligibility' 
-  | 'apply-now' 
-  | 'track-application' 
-  | 'document-assistant' 
-  | 'deficiency-centre' 
-  | 'resources' 
-  | 'help-support';
+  | 'my-applications' 
+  | 'documents' 
+  | 'notifications' 
+  | 'track-status';
+
+export type OfficerTab = 
+  | 'command-center' 
+  | 'applications' 
+  | 'ai-doc-review' 
+  | 'eligibility-review' 
+  | 'deficiencies' 
+  | 'selection-support' 
+  | 'analytics' 
+  | 'audit-trail';
 
 export type AdminTab = 
-  | 'dashboard' 
-  | 'queue' 
-  | 'review' 
-  | 'scheme-engine' 
-  | 'audit-trail' 
-  | 'analytics';
+  | 'scheme-config' 
+  | 'users-roles' 
+  | 'workflow-config' 
+  | 'system-analytics';
 
 export interface Scheme {
   id: string;
@@ -40,26 +46,27 @@ export interface Scheme {
 }
 
 export interface EligibilityQuery {
+  // Step 1: Personal Details
   category: string;
-  subTribe: string;
-  academicLevel: string;
-  course: string;
-  institutionType: string;
-  annualFamilyIncome: number;
-  studyLocation: 'Domestic' | 'Overseas';
+  state: string;
+  gender: string;
+  dob: string;
+  // Step 2: Academic Details
+  courseDegree: string;
+  yearOfStudy: string;
+  institution: string;
+  academicScore: string;
+  // Step 3: Scheme-Specific Details
+  annualIncome: number;
   schemeId: string;
+  admissionDetails: string;
+  otherCriteria: string;
 }
 
-export interface EligibilityResult {
-  status: 'potentially_eligible' | 'requires_scrutiny' | 'not_eligible';
-  title: string;
-  matchedConditionsCount: number;
-  pendingConditionsCount: number;
-  matchedConditions: string[];
-  pendingConditions: string[];
-  unmatchedConditions: string[];
-  aiExplanation: string;
-  disclaimer: string;
+export interface ExplainableCriterion {
+  criterion: string;
+  result: 'satisfied' | 'pending' | 'failed';
+  evidence: string;
 }
 
 export interface DocumentField {
@@ -101,8 +108,15 @@ export interface ApplicationDeficiency {
   replacementUploadedAt?: string;
 }
 
+export interface ApplicationTimelineEvent {
+  date: string;
+  title: string;
+  status: 'completed' | 'warning' | 'pending' | 'in_progress';
+  description: string;
+}
+
 export interface ApplicationRecord {
-  id: string; // e.g. ST26-10482
+  id: string; // e.g. ST26-DEMO001
   schemeId: string;
   schemeName: string;
   applicantName: string;
@@ -111,7 +125,7 @@ export interface ApplicationRecord {
   mobile: string;
   email: string;
   stSubTribe: string;
-  isPVTG: boolean; // Particularly Vulnerable Tribal Group
+  isPVTG: boolean;
   state: string;
   district: string;
   institution: string;
@@ -124,6 +138,7 @@ export interface ApplicationRecord {
   overallStatus: 'In Review' | 'Deficiency Raised' | 'Verified' | 'Selection Ready' | 'Sanctioned';
   documents: ApplicationDocument[];
   deficiencies: ApplicationDeficiency[];
+  timeline: ApplicationTimelineEvent[];
   dbtAccountLinked: boolean;
   dbtBankName: string;
   digiLockerVerified: boolean;
@@ -139,9 +154,9 @@ export interface SchemeRuleConfig {
   schemeName: string;
   annualIncomeCeiling: number;
   minGraduationMarks: number;
-  pvtgWeightageBonus: number; // percentage or points
+  pvtgWeightageBonus: number;
   femaleQuotaPercentage: number;
-  ocrConfidenceCutoff: number; // percentage
+  ocrConfidenceCutoff: number;
   allowDigiLockerBypass: boolean;
   workflowStages: string[];
   selectionFormula: string;
@@ -149,15 +164,28 @@ export interface SchemeRuleConfig {
   notificationTemplateEmail: string;
   applicationOpenDate: string;
   applicationCloseDate: string;
+  rulesChecked: {
+    academic: boolean;
+    stEligibility: boolean;
+    incomeCriteria: boolean;
+    schemeSpecific: boolean;
+  };
+  requiredDocsChecked: {
+    caste: boolean;
+    academic: boolean;
+    income: boolean;
+    schemeSpecific: boolean;
+  };
 }
 
 export interface AuditLogEntry {
   id: string;
+  date: string; // e.g. "17 Sep", "18 Sep", "19 Sep"
   timestamp: string;
   actor: string;
-  actorRole: 'System AI Engine' | 'Scrutiny Officer' | 'Applicant' | 'Scheme Admin';
+  actorRole: 'System' | 'Officer' | 'Student' | 'AI';
   action: string;
-  target: string;
-  details: string;
-  hash: string;
+  target?: string;
+  details?: string;
+  hash?: string;
 }

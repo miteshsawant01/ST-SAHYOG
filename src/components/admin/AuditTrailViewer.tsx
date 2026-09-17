@@ -24,8 +24,8 @@ export const AuditTrailViewer: React.FC = () => {
     const matchRole = filterRole === 'All' || entry.actorRole === filterRole;
     const matchSearch = entry.actor.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         entry.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        entry.target.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        entry.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (entry.target ? entry.target.toLowerCase().includes(searchTerm.toLowerCase()) : false) ||
+                        (entry.details ? entry.details.toLowerCase().includes(searchTerm.toLowerCase()) : false) ||
                         entry.timestamp.includes(searchTerm);
     return matchRole && matchSearch;
   });
@@ -170,11 +170,11 @@ export const AuditTrailViewer: React.FC = () => {
                   </td>
                   <td className="py-3 px-4 whitespace-nowrap">
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${
-                      log.actorRole === 'Scrutiny Officer' 
+                      log.actorRole === 'Officer' 
                         ? 'bg-blue-100 text-blue-900' 
-                        : log.actorRole === 'System AI Engine'
+                        : log.actorRole === 'AI' || log.actorRole === 'System'
                         ? 'bg-purple-100 text-purple-900'
-                        : log.actorRole === 'Applicant'
+                        : log.actorRole === 'Student'
                         ? 'bg-amber-100 text-amber-900'
                         : 'bg-slate-100 text-slate-900'
                     }`}>
